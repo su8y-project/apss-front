@@ -1,12 +1,72 @@
-import { Activity, Database, ShieldCheck, Share2 } from "lucide-react";
+import { Activity, Database, ShieldCheck, Share2, Link, Camera, X, Download } from "lucide-react";
 import { cn } from "../lib/utils";
 import { toast } from "sonner";
+import { useState, useRef, useEffect } from "react";
+import html2canvas from "html2canvas";
 
 interface HeaderProps {
     className?: string;
 }
 
 export function Header({ className }: HeaderProps) {
+    const [isShareOpen, setIsShareOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsShareOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(window.location.href);
+        toast.success("Link copied to clipboard!", {
+            description: "Anyone with this link can view the current dashboard state."
+        });
+        setIsShareOpen(false);
+    };
+
+    const handleScreenshot = async () => {
+        setIsShareOpen(false); // Close menu first to avoid capturing it
+
+        const loadingToast = toast.loading("Capturing dashboard...");
+
+        try {
+            // Wait a tick for the menu to close completely
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            const canvas = await html2canvas(document.body, {
+                ignoreElements: (element) => element.classList.contains('sonner-toast') // Try to ignore toasts
+            });
+
+            const image = canvas.toDataURL("image/png");
+
+            // Create download link
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = `AI_Quant_Dashboard_${new Date().toISOString().slice(0, 10)}.png`;
+            link.click();
+
+            toast.dismiss(loadingToast);
+            toast.success("Screenshot saved!", {
+                description: "Dashboard capture downloaded successfully."
+            });
+        } catch (error) {
+            console.error("Screenshot failed:", error);
+            toast.dismiss(loadingToast);
+            toast.error("Screenshot failed", {
+                description: "Could not capture the dashboard."
+            });
+        }
+    };
+
+    // ... (rest of render)
+
     return (
         <header className={cn("flex items-center justify-between border-b border-white/5 bg-slate-950/50 px-6 py-3 backdrop-blur-md", className)}>
             <div className="flex items-center gap-4">
@@ -52,18 +112,38 @@ export function Header({ className }: HeaderProps) {
                     </div>
                 </div>
 
-                <button
-                    onClick={() => {
-                        navigator.clipboard.writeText(window.location.href);
-                        toast.success("Link copied to clipboard!", {
-                            description: "Anyone with this link can view the current dashboard state."
-                        });
-                    }}
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-indigo-500 hover:text-white transition-all"
-                    title="Share Dashboard View"
-                >
-                    <Share2 className="h-4 w-4" />
-                </button>
+                <div className="relative" ref={dropdownRef}>
+                    <button
+                        onClick={() => setIsShareOpen(!isShareOpen)}
+                        className={cn(
+                            "flex h-8 w-8 items-center justify-center rounded-full transition-all",
+                            isShareOpen ? "bg-indigo-500 text-white" : "bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white"
+                        )}
+                        title="Share Dashboard"
+                    >
+                        {isShareOpen ? <X className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
+                    </button>
+
+                    {/* Share Dropdown */}
+                    {isShareOpen && (
+                        <div className="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-xl border border-white/10 bg-slate-900/90 p-1 shadow-xl backdrop-blur-xl ring-1 ring-black/50 z-50">
+                            <button
+                                onClick={handleCopyLink}
+                                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
+                            >
+                                <Link className="h-4 w-4 text-indigo-400" />
+                                <span>Copy Link</span>
+                            </button>
+                            <button
+                                onClick={handleScreenshot}
+                                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
+                            >
+                                <Camera className="h-4 w-4 text-emerald-400" />
+                                <span>Save Screenshot</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
                 <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
                     <ShieldCheck className="h-4 w-4" />
                 </button>
