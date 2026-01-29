@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 15 23 42;
+    /* Slate-900 hex #0f172a converted to RGB or tailored? Wait, this is tailwind config, sticking to hex in config or CSS variables. */
+    /* Actually, for now let's use the Tailwind utility classes mostly, but set some overrides */
+    --radius: 0.5rem;
+  }
+
+  body {
+    @apply bg-slate-900 text-slate-200 font-sans antialiased;
+  }
+
+  /* Custom Scrollbar for "Terminal" feel */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-slate-950;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-800 rounded hover:bg-slate-700;
+  }
+}
