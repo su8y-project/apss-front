@@ -1,4 +1,5 @@
-import { Activity, Database, ShieldCheck, Share2, Link, Camera, X, Download, Copy } from "lucide-react";
+import { Activity, Database, ShieldCheck, Share2, Link, Camera, X, Download, Copy, LogOut } from "lucide-react";
+import { GoogleLogo } from "./GoogleLogo";
 import { cn } from "../lib/utils";
 import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
@@ -10,7 +11,26 @@ interface HeaderProps {
 
 export function Header({ className }: HeaderProps) {
     const [isShareOpen, setIsShareOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Mock Auth State
     const dropdownRef = useRef<HTMLDivElement>(null);
+
+    const handleLogin = () => {
+        // Simulate API Call
+        toast.loading("Authenticating with Google...");
+        setTimeout(() => {
+            toast.dismiss();
+            setIsLoggedIn(true);
+            toast.success("Welcome back, Analyst!", {
+                description: "Successfully signed in via Google."
+            });
+        }, 1000);
+    };
+
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+        toast.info("Signed out successfully");
+    };
+
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -167,6 +187,41 @@ export function Header({ className }: HeaderProps) {
                 <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
                     <ShieldCheck className="h-4 w-4" />
                 </button>
+
+                {/* Auth Section */}
+                <div className="border-l border-white/5 pl-6">
+                    {isLoggedIn ? (
+                        <div className="flex items-center gap-3">
+                            <div className="text-right hidden sm:block">
+                                <p className="text-xs font-bold text-slate-200">Kim Analyst</p>
+                                <p className="text-[10px] text-slate-500">Premium Plan</p>
+                            </div>
+                            <button
+                                onClick={handleLogout}
+                                className="group relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-indigo-500/20 transition-all hover:ring-indigo-500"
+                            >
+                                <img
+                                    src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix"
+                                    alt="User Profile"
+                                    className="h-full w-full object-cover"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                                    <LogOut className="h-3 w-3 text-white" />
+                                </div>
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={handleLogin}
+                            className="flex items-center gap-2 rounded-full bg-slate-800 pr-4 pl-3 py-1.5 transition-all hover:bg-slate-700 hover:ring-1 hover:ring-white/10"
+                        >
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white p-1">
+                                <GoogleLogo />
+                            </div>
+                            <span className="text-xs font-bold text-slate-300">Sign in</span>
+                        </button>
+                    )}
+                </div>
             </div>
         </header>
     );
