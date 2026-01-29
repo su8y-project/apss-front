@@ -1,6 +1,7 @@
 import { MainLayout } from "./layout/MainLayout";
 import { ScoreBoard } from "./features/dashboard/ScoreBoard";
 import { BriefingPanel } from "./features/briefing/BriefingPanel";
+import { Toaster } from "sonner";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <ScoreBoard />
         </section>
       </div>
+      <Toaster position="top-center" theme="dark" />
     </MainLayout>
   )
 }

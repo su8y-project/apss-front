@@ -1,12 +1,34 @@
 import { Filter, RefreshCcw, Layers, BarChart3 } from "lucide-react";
 import { MOCK_RANK_DATA, MOCK_SECTOR_RANK_DATA, enrichRankData } from "../../lib/mock-data";
 import { StockCard } from "./StockCard";
-import { useState } from "react";
 import { cn } from "../../lib/utils";
+import { useSearchParams } from "react-router-dom";
 
 export function ScoreBoard() {
-    const [viewMode, setViewMode] = useState<'STOCK' | 'SECTOR'>('STOCK');
-    const [filterMinScore, setFilterMinScore] = useState(0);
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    // URL State Parsers
+    const viewMode = (searchParams.get('view') as 'STOCK' | 'SECTOR') || 'STOCK';
+    const filterMinScore = Number(searchParams.get('minScore')) || 0;
+
+    // State Setters
+    const setViewMode = (mode: 'STOCK' | 'SECTOR') => {
+        setSearchParams(prev => {
+            prev.set('view', mode);
+            return prev;
+        });
+    };
+
+    const setFilterMinScore = (score: number) => {
+        setSearchParams(prev => {
+            if (score === 0) {
+                prev.delete('minScore');
+            } else {
+                prev.set('minScore', score.toString());
+            }
+            return prev;
+        });
+    };
 
     // Transform API Rank Data to UI Stock Data
     const stocks = MOCK_RANK_DATA.data.ranks
@@ -32,7 +54,7 @@ export function ScoreBoard() {
                     </div>
                     <div className="flex gap-2">
                         <button
-                            onClick={() => setFilterMinScore(prev => prev === 80 ? 0 : 80)}
+                            onClick={() => setFilterMinScore(filterMinScore === 80 ? 0 : 80)}
                             className={cn(
                                 "flex items-center gap-1 rounded px-2 py-1 text-[10px] font-medium transition-colors border",
                                 filterMinScore === 80

@@ -1,5 +1,6 @@
-import { Activity, Database, ShieldCheck } from "lucide-react";
+import { Activity, Database, ShieldCheck, Share2 } from "lucide-react";
 import { cn } from "../lib/utils";
+import { toast } from "sonner";
 
 interface HeaderProps {
     className?: string;
@@ -51,6 +52,18 @@ export function Header({ className }: HeaderProps) {
                     </div>
                 </div>
 
+                <button
+                    onClick={() => {
+                        navigator.clipboard.writeText(window.location.href);
+                        toast.success("Link copied to clipboard!", {
+                            description: "Anyone with this link can view the current dashboard state."
+                        });
+                    }}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-indigo-500 hover:text-white transition-all"
+                    title="Share Dashboard View"
+                >
+                    <Share2 className="h-4 w-4" />
+                </button>
                 <button className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
                     <ShieldCheck className="h-4 w-4" />
                 </button>
