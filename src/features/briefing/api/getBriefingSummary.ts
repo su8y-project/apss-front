@@ -1,26 +1,31 @@
-import type { BriefingResponse, BriefingDay } from '../../../lib/mock-data';
+import { apiClient } from '../../../lib/api-client';
+import type { BriefingDay } from '../../../lib/mock-data';
+import type { Slice } from '../../../lib/types';
 
-export const getBriefingSummary = async (): Promise<BriefingDay[]> => {
+export const getBriefingSummary = async ({ pageParam = 0 }: { pageParam?: unknown }): Promise<Slice<BriefingDay>> => {
+    const page = typeof pageParam === 'number' ? pageParam : 0;
     try {
-        const response = await fetch('http://localhost:8080/api/v1/issues/summary');
+        const size = 7; // Default page size (one week)
+        const result = await apiClient.get<Slice<BriefingDay>>('/issues/summary', {
+            params: {
+                page,
+                size
+            }
+        });
 
-        if (!response.ok) {
-            throw new Error(`API Error: ${response.status} ${response.statusText}`);
-        }
-
-        const result: BriefingResponse = await response.json();
-
-        if (result.status === 'success' && Array.isArray(result.data)) {
+        // Check if content exists (Spring Slice structure)
+        if (result && Array.isArray(result.content)) {
             // Log success
             console.log(JSON.stringify({
                 level: 'info',
                 event: 'fetch_briefing_success',
-                count: result.data.length,
+                page: pageParam,
+                count: result.content.length,
                 timestamp: new Date().toISOString()
             }));
-            return result.data;
+            return result;
         } else {
-            throw new Error("Invalid API response format");
+            throw new Error("Invalid API response format: Expected Slice structure");
         }
     } catch (error) {
         // Log error
