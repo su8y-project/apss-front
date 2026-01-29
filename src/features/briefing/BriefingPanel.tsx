@@ -25,10 +25,6 @@ export function BriefingPanel() {
                     date={selectedDate}
                     issues={selectedDayData.issues}
                 />
-
-                <MacroSection data={BRIEFING_DATA.macro} />
-
-                <KoreaImpactSection data={BRIEFING_DATA.koreaImpact} />
             </div>
         </div>
     );

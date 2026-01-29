@@ -1,16 +1,15 @@
-import { ArrowDown, ArrowRight, ArrowUp, Zap } from "lucide-react";
+import { ArrowDown, ArrowUp, Zap } from "lucide-react";
 import { Area, AreaChart, ResponsiveContainer, YAxis } from "recharts";
 import { cn } from "../../lib/utils";
 import type { StockData } from "../../lib/mock-data";
 
 interface StockCardProps {
     data: StockData;
+    rank?: number;
 }
 
-export function StockCard({ data }: StockCardProps) {
+export function StockCard({ data, rank }: StockCardProps) {
     const isPositive = data.change >= 0;
-    const isBuy = data.signal === "BUY";
-    const isSell = data.signal === "SELL";
 
     return (
         <div className="group relative overflow-hidden rounded-xl border border-white/5 bg-slate-900/40 p-5 backdrop-blur-sm transition-all hover:border-white/10 hover:bg-slate-900/60">
@@ -19,8 +18,17 @@ export function StockCard({ data }: StockCardProps) {
                 <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-indigo-500/10 blur-3xl transition-all group-hover:bg-indigo-500/20"></div>
             )}
 
-            <div className="flex items-start justify-between">
-                <div>
+            <div className="flex items-start justify-between gap-3">
+                {/* Rank Indicator */}
+                {rank && (
+                    <div className="flex-shrink-0 flex flex-col items-center justify-center pt-1">
+                        <span className="text-xl font-bold text-slate-500 font-mono leading-none">
+                            {rank.toString().padStart(2, '0')}
+                        </span>
+                    </div>
+                )}
+
+                <div className="flex-1">
                     <div className="flex items-center gap-2">
                         <h3 className="text-lg font-bold text-slate-100">{data.symbol}</h3>
                         <span className="rounded-md bg-slate-800 px-1.5 py-0.5 text-[10px] uppercase text-slate-500">{data.name}</span>
@@ -82,16 +90,7 @@ export function StockCard({ data }: StockCardProps) {
                         <span className="font-mono text-slate-300">{data.factors.volatility}</span>
                     </div>
 
-                    {/* Action Button */}
-                    <button className={cn(
-                        "mt-1 flex w-full items-center justify-center gap-1.5 rounded bg-slate-800 py-1 text-[10px] font-bold uppercase transition-all hover:brightness-110",
-                        isBuy ? "bg-emerald-600 text-white hover:bg-emerald-500" :
-                            isSell ? "bg-red-600 text-white hover:bg-red-500" :
-                                "text-slate-400"
-                    )}>
-                        {isBuy ? "Instant Buy" : isSell ? "Liquidate" : "Watch"}
-                        {isBuy && <ArrowRight className="h-3 w-3" />}
-                    </button>
+
                 </div>
             </div>
         </div>

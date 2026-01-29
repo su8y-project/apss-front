@@ -198,6 +198,58 @@ export const MOCK_RANK_DATA: RankResponse = {
     }
 };
 
+export interface SectorRankItem {
+    sectorCode: string;
+    name: string;
+    finalScore: number;
+    relatedIssues: string[];
+}
+
+export interface SectorRankResponse {
+    status: string;
+    data: {
+        ranks: SectorRankItem[];
+    };
+}
+
+export const MOCK_SECTOR_RANK_DATA: SectorRankResponse = {
+    status: "success",
+    data: {
+        ranks: [
+            {
+                sectorCode: "IT_TECH",
+                name: "IT/기술주",
+                finalScore: 92.5,
+                relatedIssues: []
+            },
+            {
+                sectorCode: "SEMICON",
+                name: "반도체/장비",
+                finalScore: 88.2,
+                relatedIssues: []
+            },
+            {
+                sectorCode: "BIO",
+                name: "바이오/헬스케어",
+                finalScore: 65.4,
+                relatedIssues: []
+            },
+            {
+                sectorCode: "AUTO",
+                name: "자동차/부품",
+                finalScore: 55.1,
+                relatedIssues: []
+            },
+            {
+                sectorCode: "FINANCE",
+                name: "금융/은행",
+                finalScore: 45.8,
+                relatedIssues: []
+            }
+        ]
+    }
+};
+
 // Helper to generate full StockData from RankItem (for UI simulation)
 export function enrichRankData(rank: RankItem): StockData {
     // Deterministic pseudo-random based on ticker char codes

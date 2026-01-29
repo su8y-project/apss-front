@@ -28,10 +28,6 @@ export function Header({ className }: HeaderProps) {
                         </span>
                         ENGINE ONLINE
                     </div>
-                    <div className="flex items-center gap-1.5 rounded-full bg-slate-800/50 px-2.5 py-0.5 text-[10px] font-medium text-slate-400 ring-1 ring-white/5">
-                        <Database className="h-3 w-3" />
-                        LOKI: CONNECTED
-                    </div>
                 </div>
             </div>
 
