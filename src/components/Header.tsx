@@ -1,4 +1,4 @@
-import { Activity, Database, ShieldCheck, Share2, Link, Camera, X, Download } from "lucide-react";
+import { Activity, Database, ShieldCheck, Share2, Link, Camera, X, Download, Copy } from "lucide-react";
 import { cn } from "../lib/utils";
 import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
@@ -31,10 +31,10 @@ export function Header({ className }: HeaderProps) {
         setIsShareOpen(false);
     };
 
-    const handleScreenshot = async () => {
+    const handleScreenshot = async (action: 'download' | 'copy') => {
         setIsShareOpen(false); // Close menu first to avoid capturing it
 
-        const loadingToast = toast.loading("Capturing dashboard...");
+        const loadingToast = toast.loading(action === 'download' ? "Saving screenshot..." : "Copying screenshot...");
 
         try {
             // Wait a tick for the menu to close completely
@@ -44,18 +44,31 @@ export function Header({ className }: HeaderProps) {
                 ignoreElements: (element) => element.classList.contains('sonner-toast') // Try to ignore toasts
             });
 
-            const image = canvas.toDataURL("image/png");
+            if (action === 'download') {
+                const image = canvas.toDataURL("image/png");
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = `AI_Quant_Dashboard_${new Date().toISOString().slice(0, 10)}.png`;
+                link.click();
 
-            // Create download link
-            const link = document.createElement('a');
-            link.href = image;
-            link.download = `AI_Quant_Dashboard_${new Date().toISOString().slice(0, 10)}.png`;
-            link.click();
+                toast.dismiss(loadingToast);
+                toast.success("Screenshot saved!", {
+                    description: "Dashboard capture downloaded successfully."
+                });
+            } else {
+                canvas.toBlob(async (blob) => {
+                    if (!blob) throw new Error("Canvas blob failed");
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ 'image/png': blob })
+                    ]);
 
-            toast.dismiss(loadingToast);
-            toast.success("Screenshot saved!", {
-                description: "Dashboard capture downloaded successfully."
-            });
+                    toast.dismiss(loadingToast);
+                    toast.success("Copied to clipboard!", {
+                        description: "Screenshot is ready to paste."
+                    });
+                });
+            }
+
         } catch (error) {
             console.error("Screenshot failed:", error);
             toast.dismiss(loadingToast);
@@ -135,10 +148,17 @@ export function Header({ className }: HeaderProps) {
                                 <span>Copy Link</span>
                             </button>
                             <button
-                                onClick={handleScreenshot}
+                                onClick={() => handleScreenshot('copy')}
                                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
                             >
-                                <Camera className="h-4 w-4 text-emerald-400" />
+                                <Copy className="h-4 w-4 text-sky-400" />
+                                <span>Copy Screenshot</span>
+                            </button>
+                            <button
+                                onClick={() => handleScreenshot('download')}
+                                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
+                            >
+                                <Download className="h-4 w-4 text-emerald-400" />
                                 <span>Save Screenshot</span>
                             </button>
                         </div>
