@@ -18,8 +18,10 @@ export const apiClient = {
 
         const config: RequestInit = {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
             },
             ...customConfig,
         };
