@@ -1,10 +1,9 @@
 import { BriefingHeader } from "./components/BriefingHeader";
 import { useBriefingData } from "./api/useBriefingData";
-import { AlertCircle } from "lucide-react";
 import { MarketIssuesSection } from "./components/MarketIssuesSection";
-import { MacroSection } from "./components/MacroSection";
-import { KoreaImpactSection } from "./components/KoreaImpactSection";
 import { useSearchParams } from "react-router-dom";
+import { ErrorState } from "../../components/ErrorState";
+import { Skeleton } from "../../components/Skeleton";
 
 export function BriefingPanel() {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -21,62 +20,56 @@ export function BriefingPanel() {
         });
     };
 
-    // Loading State
-    if (isLoading) {
-        return (
-            <div className="flex flex-col gap-4 p-1 h-full animate-pulse">
-                <div className="h-24 rounded-xl bg-slate-800/50" />
-                <div className="flex-1 rounded-xl bg-slate-800/30" />
-            </div>
-        );
-    }
-
-    // Error State
-    if (error) {
-        return (
-            <div className="flex h-full flex-col items-center justify-center gap-4 p-6 text-center">
-                <div className="rounded-full bg-red-500/10 p-3">
-                    <AlertCircle className="h-6 w-6 text-red-400" />
-                </div>
-                <div>
-                    <h3 className="text-sm font-medium text-slate-200">데이터를 불러올 수 없습니다</h3>
-                    <p className="mt-1 text-xs text-slate-500">{error.message}</p>
-                </div>
-                <button
-                    onClick={() => window.location.reload()}
-                    className="rounded-lg bg-slate-800 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
-                >
-                    다시 시도
-                </button>
-            </div>
-        );
-    }
-
-    // Empty State
-    if (briefingData.length === 0) {
-        return (
-            <div className="flex h-full items-center justify-center p-6 text-center">
-                <p className="text-sm text-slate-500">등록된 브리핑 데이터가 없습니다.</p>
-            </div>
-        );
-    }
-
     const selectedDayData = briefingData.find(d => d.date === selectedDate) || briefingData[0];
+
+    const status = isLoading ? 'loading'
+        : error ? 'error'
+            : briefingData.length === 0 ? 'empty'
+                : 'success';
+
+    const renderContent = () => {
+        if (status !== 'success') {
+            return {
+                loading: (
+                    <div className="flex flex-col gap-4 h-full">
+                        <Skeleton className="h-24 w-full rounded-xl" />
+                        <Skeleton className="h-40 w-full rounded-xl" />
+                        <Skeleton className="h-40 w-full rounded-xl" />
+                    </div>
+                ),
+                error: (
+                    <ErrorState
+                        message={error?.message || "Unknown error"}
+                        onRetry={() => window.location.reload()}
+                    />
+                ),
+                empty: (
+                    <div className="flex h-full items-center justify-center p-6 text-center">
+                        <p className="text-sm text-slate-500">등록된 브리핑 데이터가 없습니다.</p>
+                    </div>
+                )
+            }[status];
+        }
+
+        return (
+            <MarketIssuesSection
+                date={selectedDate}
+                issues={selectedDayData?.issues || []}
+            />
+        );
+    };
 
     return (
         <div className="flex flex-col gap-4 p-1 h-full">
             <BriefingHeader
-                data={{ status: "success", data: briefingData }}
+                data={briefingData.length > 0 ? { status: "success", data: briefingData } : undefined}
                 selectedDate={selectedDate}
                 onDateSelect={setSelectedDate}
+                isLoading={isLoading}
             />
 
-            {/* Scrollable Content Area */}
             <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-6 pb-4">
-                <MarketIssuesSection
-                    date={selectedDate}
-                    issues={selectedDayData.issues}
-                />
+                {renderContent()}
             </div>
         </div>
     );

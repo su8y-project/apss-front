@@ -4,12 +4,13 @@ import { cn } from "../../../lib/utils";
 import type { BriefingResponse } from "../../../lib/mock-data";
 
 interface BriefingHeaderProps {
-    data: BriefingResponse;
+    data?: BriefingResponse; // Make optional for loading state
     selectedDate: string;
     onDateSelect: (date: string) => void;
+    isLoading?: boolean;
 }
 
-export function BriefingHeader({ data, selectedDate, onDateSelect }: BriefingHeaderProps) {
+export function BriefingHeader({ data, selectedDate, onDateSelect, isLoading }: BriefingHeaderProps) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     // Format date for display: "01.29 (Wed)"
@@ -36,7 +37,10 @@ export function BriefingHeader({ data, selectedDate, onDateSelect }: BriefingHea
 
             {/* Date Navigation */}
             <div className="relative flex items-center gap-2 px-2">
-                <button className="p-1 rounded hover:bg-slate-800 text-slate-500 hover:text-white transition-colors">
+                <button
+                    disabled={isLoading}
+                    className="p-1 rounded hover:bg-slate-800 text-slate-500 hover:text-white transition-colors disabled:opacity-50"
+                >
                     <ChevronLeft className="h-4 w-4" />
                 </button>
 
@@ -45,29 +49,46 @@ export function BriefingHeader({ data, selectedDate, onDateSelect }: BriefingHea
                     className="flex-1 flex gap-2 overflow-x-auto no-scrollbar scroll-smooth mask-linear-fade"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                    {data.data.map((day) => {
-                        const { md, day: weekDay } = formatDate(day.date);
-                        const isSelected = selectedDate === day.date;
-
-                        return (
-                            <button
-                                key={day.date}
-                                onClick={() => onDateSelect(day.date)}
-                                className={cn(
-                                    "flex min-w-[80px] flex-col items-center justify-center rounded-lg border py-2 transition-all",
-                                    isSelected
-                                        ? "border-indigo-500/50 bg-indigo-500/10 text-indigo-400 ring-1 ring-indigo-500/20"
-                                        : "border-white/5 bg-slate-900/40 text-slate-500 hover:bg-slate-800 hover:text-slate-300"
-                                )}
+                    {isLoading ? (
+                        // Skeleton Loading State
+                        Array.from({ length: 7 }).map((_, i) => (
+                            <div
+                                key={i}
+                                className="flex min-w-[80px] flex-col items-center justify-center rounded-lg border border-white/5 bg-slate-900/40 py-2 gap-1 animate-pulse"
                             >
-                                <span className="text-[10px] uppercase opacity-70">{weekDay}</span>
-                                <span className="text-xs font-bold font-mono">{md}</span>
-                            </button>
-                        );
-                    })}
+                                <div className="h-3 w-8 bg-slate-800 rounded" />
+                                <div className="h-4 w-12 bg-slate-800 rounded" />
+                            </div>
+                        ))
+                    ) : (
+                        // Data Loaded State
+                        data?.data.map((day) => {
+                            const { md, day: weekDay } = formatDate(day.date);
+                            const isSelected = selectedDate === day.date;
+
+                            return (
+                                <button
+                                    key={day.date}
+                                    onClick={() => onDateSelect(day.date)}
+                                    className={cn(
+                                        "flex min-w-[80px] flex-col items-center justify-center rounded-lg border py-2 transition-all",
+                                        isSelected
+                                            ? "border-indigo-500/50 bg-indigo-500/10 text-indigo-400 ring-1 ring-indigo-500/20"
+                                            : "border-white/5 bg-slate-900/40 text-slate-500 hover:bg-slate-800 hover:text-slate-300"
+                                    )}
+                                >
+                                    <span className="text-[10px] uppercase opacity-70">{weekDay}</span>
+                                    <span className="text-xs font-bold font-mono">{md}</span>
+                                </button>
+                            );
+                        })
+                    )}
                 </div>
 
-                <button className="p-1 rounded hover:bg-slate-800 text-slate-500 hover:text-white transition-colors">
+                <button
+                    disabled={isLoading}
+                    className="p-1 rounded hover:bg-slate-800 text-slate-500 hover:text-white transition-colors disabled:opacity-50"
+                >
                     <ChevronRight className="h-4 w-4" />
                 </button>
             </div>
