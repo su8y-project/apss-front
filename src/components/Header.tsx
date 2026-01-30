@@ -1,5 +1,5 @@
-import { Activity, Database, ShieldCheck, Share2, Link, Camera, X, Download, Copy, LogOut } from "lucide-react";
-import { GoogleLogo } from "./GoogleLogo";
+import { Activity, Database, ShieldCheck, Share2, Link, Camera, X, Download, Copy, LogOut, Github } from "lucide-react";
+// import { GoogleLogo } from "./GoogleLogo";
 import { cn } from "../lib/utils";
 import { toast } from "sonner";
 import { useState, useRef, useEffect } from "react";
@@ -14,17 +14,7 @@ export function Header({ className }: HeaderProps) {
     const [isLoggedIn, setIsLoggedIn] = useState(false); // Mock Auth State
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const handleLogin = () => {
-        // Simulate API Call
-        toast.loading("Authenticating with Google...");
-        setTimeout(() => {
-            toast.dismiss();
-            setIsLoggedIn(true);
-            toast.success("Welcome back, Analyst!", {
-                description: "Successfully signed in via Google."
-            });
-        }, 1000);
-    };
+
 
     const handleLogout = () => {
         setIsLoggedIn(false);
@@ -212,13 +202,13 @@ export function Header({ className }: HeaderProps) {
                         </div>
                     ) : (
                         <button
-                            onClick={handleLogin}
+                            onClick={() => window.location.href = 'http://localhost:8080/auth/oauth/login/github'}
                             className="flex items-center gap-2 rounded-full bg-slate-800 pr-4 pl-3 py-1.5 transition-all hover:bg-slate-700 hover:ring-1 hover:ring-white/10"
                         >
-                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white p-1">
-                                <GoogleLogo />
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-black p-0.5">
+                                <Github className="h-4 w-4" />
                             </div>
-                            <span className="text-xs font-bold text-slate-300">Sign in</span>
+                            <span className="text-xs font-bold text-slate-300">Sign in with GitHub</span>
                         </button>
                     )}
                 </div>
