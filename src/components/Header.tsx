@@ -116,25 +116,6 @@ export function Header({ className }: HeaderProps) {
             </div>
 
             <div className="flex items-center gap-6">
-                {/* Asset Display */}
-                <div className="flex items-center gap-4">
-                    <div className="text-right">
-                        <p className="text-[10px] font-medium uppercase text-slate-500">Available Cash</p>
-                        <div className="flex items-center justify-end gap-1 text-sm font-bold text-slate-200 font-mono">
-                            <span className="text-slate-600">$</span>
-                            <span>241,502.85</span>
-                        </div>
-                    </div>
-                    <div className="h-8 w-[1px] bg-white/5"></div>
-                    <div className="text-right">
-                        <p className="text-[10px] font-medium uppercase text-slate-500">Total Equity</p>
-                        <div className="flex items-center justify-end gap-1 text-sm font-bold text-amber-400 font-mono">
-                            <span className="text-amber-600/50">$</span>
-                            <span>1,042,300.00</span>
-                        </div>
-                    </div>
-                </div>
-
                 <div className="relative" ref={dropdownRef}>
                     <button
                         onClick={() => setIsShareOpen(!isShareOpen)}
