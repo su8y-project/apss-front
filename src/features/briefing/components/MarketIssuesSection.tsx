@@ -23,10 +23,10 @@ export function MarketIssuesSection({ date, issues }: MarketIssuesSectionProps) 
             <div className="space-y-3">
                 {issues.map((issue) => (
                     <div
-                        key={issue.issueId}
+                        key={issue.id}
                         className={cn(
                             "rounded-xl border p-4 backdrop-blur-sm transition-all hover:bg-slate-900/60",
-                            issue.importanceScore >= 8 ? "border-amber-500/20 bg-amber-500/5 hover:border-amber-500/30" :
+                            issue.weight >= 3 ? "border-amber-500/20 bg-amber-500/5 hover:border-amber-500/30" :
                                 "border-white/5 bg-slate-900/40 hover:border-white/10"
                         )}
                     >
@@ -35,22 +35,19 @@ export function MarketIssuesSection({ date, issues }: MarketIssuesSectionProps) 
                                 <div className="flex items-center gap-2 mb-2">
                                     <span className={cn(
                                         "rounded px-1.5 py-0.5 text-[10px] font-bold uppercase",
-                                        issue.importanceScore >= 9 ? "bg-red-500/20 text-red-400" :
-                                            issue.importanceScore >= 5 ? "bg-amber-500/20 text-amber-400" :
+                                        issue.weight >= 4 ? "bg-red-500/20 text-red-400" :
+                                            issue.weight >= 3 ? "bg-amber-500/20 text-amber-400" :
                                                 "bg-slate-500/20 text-slate-400"
                                     )}>
-                                        Score {issue.importanceScore}
+                                        Score {issue.weight}
                                     </span>
-                                    {issue.tags.map(tag => (
-                                        <span key={tag} className="text-[10px] text-slate-500">#{tag}</span>
-                                    ))}
                                 </div>
                                 <h4 className="text-sm font-bold text-slate-200 mb-1">{issue.title}</h4>
-                                <p className="text-xs leading-relaxed text-slate-400">{issue.summary}</p>
+                                <p className="text-xs leading-relaxed text-slate-400">{issue.description}</p>
                             </div>
 
                             {/* Visual Importance Indicator */}
-                            {issue.importanceScore >= 8 && (
+                            {issue.weight >= 4 && (
                                 <div className="flex h-2 w-2">
                                     <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-amber-400 opacity-75"></span>
                                     <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500"></span>

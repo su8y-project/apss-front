@@ -16,11 +16,11 @@ export interface StockData {
 }
 
 export interface Issue {
-    issueId: string;
+    id: string;
     title: string;
-    importanceScore: number;
-    summary: string;
-    tags: string[];
+    description: string;
+    reference: string;
+    weight: number;
 }
 
 export interface BriefingDay {
@@ -95,55 +95,6 @@ export const MOCK_STOCKS: StockData[] = [
         factors: { momentum: 50, volatility: 15, institutional: 85 }
     }
 ];
-
-export const BRIEFING_DATA = {
-    // New Structure for US Market Overview / Issues
-    marketIssues: {
-        status: "success",
-        data: Array.from({ length: 7 }, (_, i) => {
-            const date = new Date('2026-01-29');
-            date.setDate(date.getDate() - i);
-            const dateStr = date.toISOString().split('T')[0];
-
-            return {
-                date: dateStr,
-                issues: [
-                    {
-                        issueId: `ISSUE-${dateStr}-001`,
-                        title: i === 0 ? "미국 연준, 금리 인하 시점 연기 시사" : `Market Analysis for ${dateStr}`,
-                        importanceScore: i === 0 ? 9.5 : Number((Math.random() * 10).toFixed(1)),
-                        summary: i === 0 ? "인플레이션 둔화 속도가 느려짐에 따라 연준 의장이 금리 인하 시점을 하반기로 연기할 가능성을 시사함. 이에 따라 기술주 중심의 매도세가 출회됨." : "General market movements and sector analysis based on recent economic indicators.",
-                        tags: ["매크로", "금리"]
-                    },
-                    {
-                        issueId: `ISSUE-${dateStr}-002`,
-                        title: `Tech Sector Update ${dateStr}`,
-                        importanceScore: Number((Math.random() * 10).toFixed(1)),
-                        summary: "Analysis of major technology companies and AI sector trends.",
-                        tags: ["기술", "AI"]
-                    },
-                    {
-                        issueId: `ISSUE-${dateStr}-003`,
-                        title: `Global Trade News ${dateStr}`,
-                        importanceScore: Number((Math.random() * 10).toFixed(1)),
-                        summary: "Updates on international trade agreements and supply chain logistics.",
-                        tags: ["무역", "공급망"]
-                    }
-                ]
-            };
-        })
-    } as BriefingResponse,
-
-    // Legacy/Other sections (keeping for now unless requested to remove)
-    macro: {
-        summary: "Fed minutes suggest caution on rate cuts. 10Y Treasury yield steady at 4.2%.",
-        events: ["CPI Release: Tomorrow 08:30", "Fed Chair Speech: Friday"]
-    },
-    koreaImpact: [
-        { symbol: "005930.KS", name: "Samsung Elec", impact: "Neutral", reason: "Memory chip price recovery priced in." },
-        { symbol: "000660.KS", name: "SK Hynix", impact: "Positive", reason: "Direct beneficiary of NVDA surge." }
-    ]
-};
 
 // Rank API Types
 export interface RankItem {
