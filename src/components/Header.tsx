@@ -1,8 +1,8 @@
-import { Activity, Copy, Download, Github, Link, LogOut, Share2, ShieldCheck, X } from "lucide-react";
+import {Activity, Copy, Download, Github, Link, LogOut, Share2, ShieldCheck, X} from "lucide-react";
 // import { GoogleLogo } from "./GoogleLogo";
-import { cn } from "../lib/utils";
-import { toast } from "sonner";
-import { useEffect, useRef, useState } from "react";
+import {cn} from "../lib/utils";
+import {toast} from "sonner";
+import {useEffect, useRef, useState} from "react";
 import html2canvas from "html2canvas";
 
 interface HeaderProps {
@@ -191,7 +191,11 @@ export function Header({ className }: HeaderProps) {
                         </div>
                     ) : (
                         <button
-                            onClick={() => window.location.href = 'http://localhost:8080/auth/oauth/login/github'}
+                            onClick={() => {
+                                const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+                                const origin = new URL(baseUrl).origin;
+                                window.location.href = `${origin}/auth/oauth/login/github`;
+                            }}
                             className="flex items-center justify-center h-8 w-8 rounded-full bg-slate-800 text-white/60 transition-all hover:bg-slate-700 hover:ring-1 hover:ring-white/10"
                         >
                             <Github className="h-5 w-5" />
