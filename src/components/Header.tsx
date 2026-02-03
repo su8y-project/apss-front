@@ -1,15 +1,15 @@
-import {Activity, Copy, Download, Github, Link, LogOut, Share2, ShieldCheck, X} from "lucide-react";
+import { Activity, Copy, Download, Github, Link, LogOut, Share2, ShieldCheck, X } from "lucide-react";
 // import { GoogleLogo } from "./GoogleLogo";
-import {cn} from "../lib/utils";
-import {toast} from "sonner";
-import {useEffect, useRef, useState} from "react";
+import { cn } from "../lib/utils";
+import { toast } from "sonner";
+import { useEffect, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 
 interface HeaderProps {
     className?: string;
 }
 
-export function Header({className}: HeaderProps) {
+export function Header({ className }: HeaderProps) {
     const [isShareOpen, setIsShareOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false); // Mock Auth State
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -69,7 +69,7 @@ export function Header({className}: HeaderProps) {
                 canvas.toBlob(async (blob) => {
                     if (!blob) throw new Error("Canvas blob failed");
                     await navigator.clipboard.write([
-                        new ClipboardItem({'image/png': blob})
+                        new ClipboardItem({ 'image/png': blob })
                     ]);
 
                     toast.dismiss(loadingToast);
@@ -97,12 +97,12 @@ export function Header({className}: HeaderProps) {
                 <div className="flex items-center gap-2">
                     <div
                         className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/10 ring-1 ring-indigo-500/20">
-                        <Activity className="h-5 w-5 text-indigo-400"/>
+                        <Activity className="h-5 w-5 text-indigo-400" />
                     </div>
                     <div>
-                        <h1 className="text-sm font-bold tracking-wide text-indigo-100">AI QUANT <span
-                            className="text-indigo-500">COCKPIT</span></h1>
-                        <p className="text-[10px] uppercase tracking-wider text-slate-500">System v2.1.0</p>
+                        <h1 className="text-sm font-bold tracking-wide text-indigo-100">PERSONAL AI INVESTMENT <span
+                            className="text-indigo-500">ASSISTANT</span></h1>
+                        <p className="text-[10px] uppercase tracking-wider text-slate-500">System v0.0.2</p>
                     </div>
                 </div>
 
@@ -130,7 +130,7 @@ export function Header({className}: HeaderProps) {
                         )}
                         title="Share Dashboard"
                     >
-                        {isShareOpen ? <X className="h-4 w-4"/> : <Share2 className="h-4 w-4"/>}
+                        {isShareOpen ? <X className="h-4 w-4" /> : <Share2 className="h-4 w-4" />}
                     </button>
 
                     {/* Share Dropdown */}
@@ -141,21 +141,21 @@ export function Header({className}: HeaderProps) {
                                 onClick={handleCopyLink}
                                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
                             >
-                                <Link className="h-4 w-4 text-indigo-400"/>
+                                <Link className="h-4 w-4 text-indigo-400" />
                                 <span>Copy Link</span>
                             </button>
                             <button
                                 onClick={() => handleScreenshot('copy')}
                                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
                             >
-                                <Copy className="h-4 w-4 text-sky-400"/>
+                                <Copy className="h-4 w-4 text-sky-400" />
                                 <span>Copy Screenshot</span>
                             </button>
                             <button
                                 onClick={() => handleScreenshot('download')}
                                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white transition-colors"
                             >
-                                <Download className="h-4 w-4 text-emerald-400"/>
+                                <Download className="h-4 w-4 text-emerald-400" />
                                 <span>Save Screenshot</span>
                             </button>
                         </div>
@@ -163,7 +163,7 @@ export function Header({className}: HeaderProps) {
                 </div>
                 <button
                     className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
-                    <ShieldCheck className="h-4 w-4"/>
+                    <ShieldCheck className="h-4 w-4" />
                 </button>
 
                 {/* Auth Section */}
@@ -185,23 +185,20 @@ export function Header({className}: HeaderProps) {
                                 />
                                 <div
                                     className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-                                    <LogOut className="h-3 w-3 text-white"/>
+                                    <LogOut className="h-3 w-3 text-white" />
                                 </div>
                             </button>
                         </div>
                     ) : (
                         <button
                             onClick={() => window.location.href = 'http://localhost:8080/auth/oauth/login/github'}
-                            className="flex items-center gap-2 rounded-full bg-slate-800 pr-4 pl-3 py-1.5 transition-all hover:bg-slate-700 hover:ring-1 hover:ring-white/10"
+                            className="flex items-center justify-center h-8 w-8 rounded-full bg-slate-800 text-white/60 transition-all hover:bg-slate-700 hover:ring-1 hover:ring-white/10"
                         >
-                            <div
-                                className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-black p-0.5">
-                                <Github className="h-4 w-4"/>
-                            </div>
+                            <Github className="h-5 w-5" />
                         </button>
                     )}
                 </div>
             </div>
-        </header>
+        </header >
     );
 }
