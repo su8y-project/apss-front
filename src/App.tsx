@@ -3,11 +3,25 @@ import { MainLayout } from "./layout/MainLayout";
 import { ScoreBoard } from "./features/dashboard/ScoreBoard";
 import { BriefingPanel } from "./features/briefing/BriefingPanel";
 import { Toaster } from "sonner";
+
 import { BookOpen, LayoutDashboard } from "lucide-react";
 import { cn } from "./lib/utils";
+import { useUserProfile } from "./features/user/api/useUserProfile";
+import { UserProfileForm } from "./features/user/components/UserProfileForm";
 
 function App() {
   const [activeTab, setActiveTab] = useState<'briefing' | 'dashboard'>('briefing');
+  const { error } = useUserProfile();
+
+  const isNeedOnboarding = error && 'data' in error && (error as { data?: { errorCode?: string } }).data?.errorCode === 'NEED_ONBOARDING';
+
+  if (isNeedOnboarding) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-950 p-4">
+        <UserProfileForm />
+      </div>
+    );
+  }
 
   return (
     <MainLayout>
