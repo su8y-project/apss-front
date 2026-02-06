@@ -125,16 +125,16 @@ export function Header({ className }: HeaderProps) {
                             <Activity className="h-5 w-5 text-indigo-400" />
                         </div>
                         <div>
-                            <h1 className="text-sm font-bold tracking-wide text-indigo-100">PERSONAL AI INVESTMENT <span
-                                className="text-indigo-500">ASSISTANT</span></h1>
-                            <p className="text-[10px] uppercase tracking-wider text-slate-500">System v0.0.2</p>
+                            <h1 className="text-sm font-bold tracking-wide text-indigo-100"><span
+                                className="text-indigo-500">PAIA</span></h1>
+                            <p className="text-[10px] uppercase tracking-wider text-slate-500">v0.0.2</p>
                         </div>
                     </div>
 
                     {/* Secure Badge */}
                     <div className="ml-4 flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 ring-1 ring-emerald-500/20">
                         <ShieldCheck className="h-3 w-3 text-emerald-400" />
-                        <span className="text-[10px] font-medium text-emerald-400">SECURE CONNECTED</span>
+                        <span className="text-[10px] font-medium text-emerald-400">SECURED</span>
                     </div>
                 </div>
 
