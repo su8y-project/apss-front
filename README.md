@@ -1,73 +1,17 @@
-# React + TypeScript + Vite
+# AI 개인 증권 비서
+![img.png](assets/mainpage.png)
+[LensPay APSS 사이트](https://apss.lenspay.site)
+---
+## 🧭소개
+APSS(AI Personal Sotck Secretary)는 AI 기반의 개인 증권 비서 서비스입니다.    
+복잡한 주식 시장을 쉽게 파악하고, 나만의 투자 전략을 세울 수 있도록 도와줍니다.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+여러 사이트를 돌아다니면서 주식에 대한 정보를 찾는것이 귀찮아서 만든 프로젝트입니다.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+## 주요기능
+1. 📊AI 기반 종목 분석: 커뮤니티 혹은 뉴스에 보도된 자료를 AI 기반 점수 엔진을 통해 섹터 점수를 제공
+2. 💼포트폴리오 관리:
+   - 보유 종목 현황 및 수익률 추적
+   - AI 기반 종목 분석을 통한 포트폴리오 위험군 추출
+3. 📰뉴스 요약: 실시간 증권 뉴스를 AI가 요약 정리
